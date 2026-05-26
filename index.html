@@ -65,15 +65,25 @@ function filtrar() {
 </script>
 </head>
 <body>
-    <body>
+    
+
 
 <script>
-let usuario = prompt("Usuário:");
-let senha = prompt("Senha:");
+window.onload = function() {
 
-if(usuario !== "admin" || senha !== "1234"){
-    alert("Acesso negado");
-    window.location.href = "https://google.com";
+    let usuario = prompt("Usuário:");
+    let senha = prompt("Senha:");
+
+    if (usuario !== "admin" || senha !== "1234") {
+
+        alert("Acesso negado");
+
+        document.body.innerHTML = "<h1>Acesso bloqueado</h1>";
+
+    }
+
+}
+</script>
 }
 </script>
 <h1>Base Técnica de Clientes</h1>
