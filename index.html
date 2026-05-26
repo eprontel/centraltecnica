@@ -6,9 +6,17 @@
 <title>Base Técnica de Clientes</title>
 <style>
 body{
-    font-family: Arial, sans-serif;
-    background:#f4f6f8;
-    margin:20px;
+    <body>
+
+<script>
+let usuario = prompt("Usuário:");
+let senha = prompt("Senha:");
+
+if(usuario !== "admin" || senha !== "1234"){
+    alert("Acesso negado");
+    window.location.href = "https://google.com";
+}
+</script>
 }
 h1{
     color:#1F4E78;
