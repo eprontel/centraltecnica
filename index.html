@@ -1,17 +1,21 @@
-```html
+```html id="0n8mvl"
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Central Técnica</title>
 
 <style>
 
 body{
     margin:0;
-    font-family:Arial, sans-serif;
+    padding:0;
     background:#0f172a;
+    font-family:Arial, sans-serif;
     color:white;
 }
 
@@ -35,6 +39,7 @@ header{
     border:none;
     border-radius:8px;
     font-size:16px;
+    outline:none;
 }
 
 .container{
@@ -81,26 +86,27 @@ a{
     font-weight:bold;
 }
 
+footer{
+    text-align:center;
+    padding:20px;
+    background:#111827;
+    color:#94a3b8;
+}
+
 </style>
-</head>
 
-<body>
-
- 
-```
-
-```
 <script>
 
 window.onload = function() {
 
+    // LOGIN
     const usuarioCorreto = "eprontel";
     const senhaCorreta = "Adl141103$";
 
     let usuario = prompt("Usuário:");
     let senha = prompt("Senha:");
 
-    if(usuario !== usuarioCorreto || senha !== senhaCorreta){
+    if (usuario !== usuarioCorreto || senha !== senhaCorreta) {
 
         alert("Acesso negado");
 
@@ -124,119 +130,8 @@ window.onload = function() {
 
 }
 
-</script>
-
-```
-
-  
-
-<header>
-Central Técnica - CFTV & Controle de Acesso
-</header>
-
-<div class="search">
-<input type="text" id="busca" placeholder="Buscar cliente..." onkeyup="buscarClientes()">
-</div>
-
-<div class="container" id="clientes"></div>
-
-<script>
-
-const dados = [
-
-{
-    cliente: "Bavaria",
-    equipamentos: [
-        {
-            equipamento: "SS3542 Rua Frente",
-            ip: "192.168.0.78",
-            acesso: "http://45.162.104.92:1078",
-            porta: "1078",
-            usuario: "admin",
-            senha: "eprontel30311"
-        },
-
-        {
-            equipamento: "NVD1432",
-            ip: "192.168.0.67",
-            acesso: "http://45.162.104.92:1025",
-            porta: "1025",
-            usuario: "admin",
-            senha: "eprontel30315"
-        }
-    ]
-},
-
-{
-    cliente: "Araça",
-    equipamentos: [
-        {
-            equipamento: "XPE 3200 Eclusa",
-            ip: "192.168.10.142",
-            acesso: "http://45.162.104.134:1026",
-            porta: "1026",
-            usuario: "admin",
-            senha: "Eprontel30311@"
-        }
-    ]
-}
-
-];
-
-function carregarClientes() {
-
-    const container = document.getElementById('clientes');
-
-    container.innerHTML = "";
-
-    dados.forEach(cliente => {
-
-        let html = `
-        <div class="card">
-            <h2>${cliente.cliente}</h2>
-
-            <table>
-
-            <tr>
-                <th>Equipamento</th>
-                <th>IP</th>
-                <th>Acesso</th>
-                <th>Porta</th>
-                <th>Usuário</th>
-                <th>Senha</th>
-            </tr>
-        `;
-
-        cliente.equipamentos.forEach(eq => {
-
-            html += `
-            <tr>
-                <td>${eq.equipamento}</td>
-                <td>${eq.ip}</td>
-                <td>
-                    <a href="${eq.acesso}" target="_blank">
-                    Abrir acesso
-                    </a>
-                </td>
-                <td>${eq.porta}</td>
-                <td>${eq.usuario}</td>
-                <td>${eq.senha}</td>
-            </tr>
-            `;
-        });
-
-        html += `
-            </table>
-        </div>
-        `;
-
-        container.innerHTML += html;
-
-    });
-
-}
-
-function buscarClientes(){
+// BUSCA
+function buscarClientes() {
 
     let filtro = document
         .getElementById('busca')
@@ -245,23 +140,103 @@ function buscarClientes(){
 
     let cards = document.getElementsByClassName('card');
 
-    for(let i=0;i<cards.length;i++){
+    for (let i = 0; i < cards.length; i++) {
 
-        let texto = cards[i].innerText.toLowerCase();
+        let texto = cards[i]
+            .innerText
+            .toLowerCase();
 
-        if(texto.includes(filtro)){
+        if (texto.includes(filtro)) {
+
             cards[i].style.display = "";
+
         } else {
+
             cards[i].style.display = "none";
+
         }
 
     }
 
 }
 
-carregarClientes();
-
 </script>
+
+</head>
+
+<body>
+
+<header>
+Central Técnica - CFTV & Controle de Acesso
+</header>
+
+<div class="search">
+
+<input
+type="text"
+id="busca"
+placeholder="Buscar cliente..."
+onkeyup="buscarClientes()">
+
+</div>
+
+<div class="container">
+
+<!-- CLIENTE -->
+
+<div class="card">
+
+<h2>hortencias</h2>
+
+<table>
+
+<tr>
+<th>Equipamento</th>
+<th>IP</th>
+<th>Acesso</th>
+<th>Porta</th>
+<th>Usuario</th>
+<th>Senha</th>
+</tr>
+
+<tr>
+<td>MHDX 5116 FUNDOS</td>
+<td>172.0.52.108</td>
+<td>
+<a href="http://45.162.104.185:5001" target="_blank">
+Abrir acesso
+</a>
+</td>
+<td>5001</td>
+<td>admin</td>
+<td>H240225@</td>
+</tr>
+
+<tr>
+<td>PORTARIA NVD 1404</td>
+<td>172.0.52.81</td>
+<td>
+<a href="http://45.162.104.185:5002" target="_blank">
+Abrir acesso
+</a>
+</td>
+<td>5002</td>
+<td>admin</td>
+<td>H240225@</td>
+</tr>
+
+</table>
+
+</div>
+
+<!-- FIM CLIENTE -->
+
+</div>
+
+<footer>
+Central Técnica © 2026
+</footer>
 
 </body>
 </html>
+```
