@@ -100,26 +100,50 @@ footer{
 </style>
 
 <script>
-const usuarioCorreto = "eprontel";
-const senhaCorreta = "Adl141103$";
+
+const usuarios = [
+    {
+        usuario: "eprontel",
+        senha: "Adl141103$"
+    },
+    {
+        usuario: "osmar",
+        senha: "osmar21082026"
+    }
+];
 
 const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQKwaZQPoN-zO1ZPMdN6AOlgtGqUltsRAir0VIO2Q8SBy9er1uMQOSBtRSlODauTQ/pub?gid=1313662978&single=true&output=csv";
 
 window.onload = function() {
 
-    let usuario = prompt("Usuário:");
-    let senha = prompt("Senha:");
+    let usuarioDigitado = prompt("Usuário:");
+    let senhaDigitada = prompt("Senha:");
 
-    if (usuario !== usuarioCorreto || senha !== senhaCorreta) {
+    let acessoLiberado = false;
+
+    for (let i = 0; i < usuarios.length; i++) {
+
+        if (
+            usuarioDigitado === usuarios[i].usuario &&
+            senhaDigitada === usuarios[i].senha
+        ) {
+            acessoLiberado = true;
+            break;
+        }
+    }
+
+    if (!acessoLiberado) {
 
         alert("Acesso negado");
 
         document.body.innerHTML = "<h1 style='text-align:center;margin-top:100px;'>Acesso bloqueado</h1>";
+
         return;
     }
 
     carregarDadosGoogleSheets();
 }
+
 
 function parseCSV(texto) {
     const linhas = [];
