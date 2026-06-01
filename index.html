@@ -6,84 +6,21 @@
 <title>Central Técnica</title>
 
 <style>
-body{
-    margin:0;
-    font-family:Arial, sans-serif;
-    background:#0f172a;
-    color:white;
-}
-header{
-    background:#111827;
-    padding:20px;
-    text-align:center;
-    font-size:28px;
-    font-weight:bold;
-    border-bottom:2px solid #1e293b;
-}
-.search{
-    padding:20px;
-    background:#111827;
-}
-.search input{
-    width:100%;
-    padding:14px;
-    border:none;
-    border-radius:8px;
-    font-size:16px;
-    box-sizing:border-box;
-}
-.container{
-    padding:20px;
-}
-.card{
-    background:#1e293b;
-    border-radius:12px;
-    padding:20px;
-    margin-bottom:20px;
-    box-shadow:0 4px 10px rgba(0,0,0,0.4);
-}
-.card h2{
-    margin-top:0;
-    color:#38bdf8;
-}
-table{
-    width:100%;
-    border-collapse:collapse;
-    margin-top:10px;
-}
-th{
-    background:#0f172a;
-    padding:10px;
-    text-align:left;
-}
-td{
-    padding:10px;
-    border-bottom:1px solid #334155;
-}
-tr:hover{
-    background:#334155;
-}
-a{
-    color:#22c55e;
-    font-weight:bold;
-    text-decoration:none;
-}
-footer{
-    text-align:center;
-    padding:20px;
-    background:#111827;
-    margin-top:40px;
-    color:#94a3b8;
-}
-.status{
-    padding:15px 20px;
-    color:#94a3b8;
-}
-.erro{
-    color:#f87171;
-    padding:20px;
-    line-height:1.5;
-}
+body{margin:0;font-family:Arial,sans-serif;background:#0f172a;color:white;}
+header{background:#111827;padding:20px;text-align:center;font-size:28px;font-weight:bold;border-bottom:2px solid #1e293b;}
+.search{padding:20px;background:#111827;}
+.search input{width:100%;padding:14px;border:none;border-radius:8px;font-size:16px;box-sizing:border-box;}
+.container{padding:20px;}
+.card{background:#1e293b;border-radius:12px;padding:20px;margin-bottom:20px;box-shadow:0 4px 10px rgba(0,0,0,.4);}
+.card h2{margin-top:0;color:#38bdf8;}
+table{width:100%;border-collapse:collapse;margin-top:10px;}
+th{background:#0f172a;padding:10px;text-align:left;}
+td{padding:10px;border-bottom:1px solid #334155;}
+tr:hover{background:#334155;}
+a{color:#22c55e;font-weight:bold;text-decoration:none;}
+footer{text-align:center;padding:20px;background:#111827;margin-top:40px;color:#94a3b8;}
+.status{padding:15px 20px;color:#94a3b8;}
+.erro{color:#f87171;padding:20px;line-height:1.5;}
 </style>
 
 <script>
@@ -94,19 +31,13 @@ const usuarios = [
 
 const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQKwaZQPoN-zO1ZPMdN6AOlgtGqUltsRAir0VIO2Q8SBy9er1uMQOSBtRSlODauTQ/pub?gid=1313662978&single=true&output=csv";
 
-window.onload = function() {
-    let usuarioDigitado = prompt("Usuário:");
-    let senhaDigitada = prompt("Senha:");
-    let acessoLiberado = false;
+window.onload = function(){
+    const usuarioDigitado = prompt("Usuário:");
+    const senhaDigitada = prompt("Senha:");
 
-    for (let i = 0; i < usuarios.length; i++) {
-        if (usuarioDigitado === usuarios[i].usuario && senhaDigitada === usuarios[i].senha) {
-            acessoLiberado = true;
-            break;
-        }
-    }
+    const acessoLiberado = usuarios.some(u => usuarioDigitado === u.usuario && senhaDigitada === u.senha);
 
-    if (!acessoLiberado) {
+    if(!acessoLiberado){
         alert("Acesso negado");
         document.body.innerHTML = "<h1 style='text-align:center;margin-top:100px;'>Acesso bloqueado</h1>";
         return;
@@ -115,107 +46,147 @@ window.onload = function() {
     carregarDadosGoogleSheets();
 };
 
-function detectarSeparador(texto) {
+function detectarSeparador(texto){
     const primeiraLinha = texto.split(/\r?\n/)[0] || "";
     const virgulas = (primeiraLinha.match(/,/g) || []).length;
     const pontoVirgulas = (primeiraLinha.match(/;/g) || []).length;
     return pontoVirgulas > virgulas ? ";" : ",";
 }
 
-function parseCSV(texto) {
+function parseCSV(texto){
     const separador = detectarSeparador(texto);
     const linhas = [];
     let linha = [];
     let campo = "";
     let dentroAspas = false;
 
-    for (let i = 0; i < texto.length; i++) {
+    for(let i=0;i<texto.length;i++){
         const char = texto[i];
-        const prox = texto[i + 1];
+        const prox = texto[i+1];
 
-        if (char === '"' && dentroAspas && prox === '"') {
+        if(char === '"' && dentroAspas && prox === '"'){
             campo += '"';
             i++;
-        } else if (char === '"') {
+        }else if(char === '"'){
             dentroAspas = !dentroAspas;
-        } else if (char === separador && !dentroAspas) {
+        }else if(char === separador && !dentroAspas){
             linha.push(campo);
             campo = "";
-        } else if ((char === "\n" || char === "\r") && !dentroAspas) {
-            if (char === "\r" && prox === "\n") i++;
+        }else if((char === "\n" || char === "\r") && !dentroAspas){
+            if(char === "\r" && prox === "\n") i++;
             linha.push(campo);
-            if (linha.some(c => String(c).trim() !== "")) linhas.push(linha);
+            if(linha.some(c => String(c).trim() !== "")) linhas.push(linha);
             linha = [];
             campo = "";
-        } else {
+        }else{
             campo += char;
         }
     }
 
-    if (campo !== "" || linha.length > 0) {
+    if(campo !== "" || linha.length > 0){
         linha.push(campo);
-        if (linha.some(c => String(c).trim() !== "")) linhas.push(linha);
+        if(linha.some(c => String(c).trim() !== "")) linhas.push(linha);
     }
 
     return linhas;
 }
 
-function escaparHTML(texto) {
-    return (texto || "")
-        .toString()
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+function normalizar(texto){
+    return (texto || "").toString().trim().toLowerCase()
+        .normalize("NFD").replace(/[\u0300-\u036f]/g,"");
 }
 
-function ehURL(texto) {
+function escaparHTML(texto){
+    return (texto || "").toString()
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+}
+
+function ehURL(texto){
     const t = (texto || "").trim().toLowerCase();
     return t.startsWith("http://") || t.startsWith("https://");
 }
 
-async function carregarDadosGoogleSheets() {
+function acharIndice(cabecalho, nomes){
+    for(const nome of nomes){
+        const idx = cabecalho.indexOf(normalizar(nome));
+        if(idx >= 0) return idx;
+    }
+    return -1;
+}
+
+function montarLinkAcesso(acesso){
+    if(ehURL(acesso)){
+        return `<a href="${escaparHTML(acesso)}" target="_blank">Abrir acesso</a>`;
+    }
+    return escaparHTML(acesso);
+}
+
+async function carregarDadosGoogleSheets(){
     const container = document.getElementById("clientes");
     const status = document.getElementById("status");
 
-    try {
+    try{
         status.innerText = "Carregando dados da planilha...";
 
         const resposta = await fetch(CSV_URL + "&cache=" + new Date().getTime());
-
-        if (!resposta.ok) {
-            throw new Error("Erro HTTP " + resposta.status + " ao carregar o CSV.");
-        }
+        if(!resposta.ok) throw new Error("Erro HTTP " + resposta.status + " ao carregar o CSV.");
 
         const csv = await resposta.text();
-
-        if (!csv || csv.trim() === "") {
-            throw new Error("O CSV veio vazio. Verifique a publicação da aba correta.");
-        }
+        if(!csv || csv.trim() === "") throw new Error("O CSV veio vazio.");
 
         const linhas = parseCSV(csv);
+        if(linhas.length < 2) throw new Error("A planilha não possui dados.");
 
-        if (linhas.length < 2) {
-            throw new Error("A planilha não possui linhas de dados.");
+        // Procura a linha real de cabeçalho.
+        // Funciona tanto para Inventário Geral quanto para abas individuais como Corcovado.
+        let linhaCabecalho = -1;
+
+        for(let i=0;i<linhas.length;i++){
+            const cab = linhas[i].map(normalizar);
+            if(cab.includes("equipamento") && cab.includes("ip")){
+                linhaCabecalho = i;
+                break;
+            }
         }
 
-        // Leitura fixa por posição:
-        // A Cliente | B Equipamento | C IP | D Acesso | E Porta | F Usuario | G Senha
-        const colCliente = 0;
-        const colEquipamento = 1;
-        const colIP = 2;
-        const colAcesso = 3;
-        const colPorta = 4;
-        const colUsuario = 5;
-        const colSenha = 6;
+        if(linhaCabecalho < 0){
+            throw new Error("Não encontrei a linha de cabeçalho com Equipamento e IP.");
+        }
+
+        const cabecalho = linhas[linhaCabecalho].map(normalizar);
+
+        const colCliente = acharIndice(cabecalho, ["cliente","condominio","condomínio"]);
+        const colEquipamento = acharIndice(cabecalho, ["equipamento"]);
+        const colIP = acharIndice(cabecalho, ["ip"]);
+        const colAcesso = acharIndice(cabecalho, ["acesso","url","link","ddns"]);
+        const colPorta = acharIndice(cabecalho, ["porta"]);
+        const colUsuario = acharIndice(cabecalho, ["usuario","usuário","user","login"]);
+        const colSenha = acharIndice(cabecalho, ["senha","password","pass"]);
+
+        if(colEquipamento < 0 || colIP < 0 || colAcesso < 0 || colPorta < 0 || colUsuario < 0 || colSenha < 0){
+            throw new Error("Cabeçalho incompleto. Precisa ter Equipamento, IP, Acesso, Porta, Usuario e Senha.");
+        }
+
+        // Nome do cliente para abas individuais:
+        // exemplo: A1 = Cliente, B1 = corcovado
+        let clientePadrao = "Sem cliente";
+        for(let i=0;i<linhaCabecalho;i++){
+            if(normalizar(linhas[i][0]) === "cliente" && linhas[i][1]){
+                clientePadrao = String(linhas[i][1]).trim();
+                break;
+            }
+        }
 
         const clientes = {};
 
-        for (let i = 1; i < linhas.length; i++) {
+        for(let i=linhaCabecalho+1;i<linhas.length;i++){
             const l = linhas[i];
 
-            const cliente = (l[colCliente] || "").trim();
+            const cliente = colCliente >= 0 ? (l[colCliente] || "").trim() : clientePadrao;
             const equipamento = (l[colEquipamento] || "").trim();
             const ip = (l[colIP] || "").trim();
             const acesso = (l[colAcesso] || "").trim();
@@ -223,80 +194,65 @@ async function carregarDadosGoogleSheets() {
             const usuario = (l[colUsuario] || "").trim();
             const senha = (l[colSenha] || "").trim();
 
-            if (!cliente && !equipamento && !ip && !acesso && !porta && !usuario && !senha) {
-                continue;
-            }
+            if(!cliente && !equipamento && !ip && !acesso && !porta && !usuario && !senha) continue;
 
-            const nomeCliente = cliente || "Sem cliente";
-
-            if (!clientes[nomeCliente]) {
-                clientes[nomeCliente] = [];
-            }
-
-            clientes[nomeCliente].push({ equipamento, ip, acesso, porta, usuario, senha });
+            const nomeCliente = cliente || clientePadrao || "Sem cliente";
+            if(!clientes[nomeCliente]) clientes[nomeCliente] = [];
+            clientes[nomeCliente].push({equipamento,ip,acesso,porta,usuario,senha});
         }
 
         let html = "";
 
         Object.keys(clientes).forEach(cliente => {
             html += `
-                <div class="card">
-                    <h2>${escaparHTML(cliente)}</h2>
-                    <table>
-                        <tr>
-                            <th>Equipamento</th>
-                            <th>IP</th>
-                            <th>Acesso</th>
-                            <th>Porta</th>
-                            <th>Usuário</th>
-                            <th>Senha</th>
-                        </tr>
-            `;
+            <div class="card">
+                <h2>${escaparHTML(cliente)}</h2>
+                <table>
+                    <tr>
+                        <th>Equipamento</th>
+                        <th>IP</th>
+                        <th>Acesso</th>
+                        <th>Porta</th>
+                        <th>Usuário</th>
+                        <th>Senha</th>
+                    </tr>`;
 
             clientes[cliente].forEach(eq => {
-                let acessoHTML = ehURL(eq.acesso)
-                    ? `<a href="${escaparHTML(eq.acesso)}" target="_blank">Abrir acesso</a>`
-                    : escaparHTML(eq.acesso);
-
                 html += `
                     <tr>
                         <td>${escaparHTML(eq.equipamento)}</td>
                         <td>${escaparHTML(eq.ip)}</td>
-                        <td>${acessoHTML}</td>
+                        <td>${montarLinkAcesso(eq.acesso)}</td>
                         <td>${escaparHTML(eq.porta)}</td>
                         <td>${escaparHTML(eq.usuario)}</td>
                         <td>${escaparHTML(eq.senha)}</td>
-                    </tr>
-                `;
+                    </tr>`;
             });
 
             html += `
-                    </table>
-                </div>
-            `;
+                </table>
+            </div>`;
         });
 
         container.innerHTML = html;
-        status.innerText = "Dados carregados com sucesso. Leitura fixa: E=Porta, F=Usuário, G=Senha.";
+        status.innerText = "Dados carregados com sucesso.";
 
-    } catch (erro) {
+    }catch(erro){
         console.error(erro);
         status.innerHTML = `
-            <div class="erro">
-                Não foi possível carregar a planilha.<br>
-                <strong>Erro:</strong> ${escaparHTML(erro.message)}<br><br>
-                Verifique se a planilha está em <strong>Arquivo → Compartilhar → Publicar na web</strong> e se a aba publicada é a correta.
-            </div>
-        `;
+        <div class="erro">
+            Não foi possível carregar a planilha.<br>
+            <strong>Erro:</strong> ${escaparHTML(erro.message)}
+        </div>`;
     }
 }
 
-function buscarClientes() {
-    let filtro = document.getElementById("busca").value.toLowerCase();
-    let cards = document.getElementsByClassName("card");
+function buscarClientes(){
+    const filtro = document.getElementById("busca").value.toLowerCase();
+    const cards = document.getElementsByClassName("card");
 
-    for (let i = 0; i < cards.length; i++) {
-        let texto = cards[i].innerText.toLowerCase();
+    for(let i=0;i<cards.length;i++){
+        const texto = cards[i].innerText.toLowerCase();
         cards[i].style.display = texto.includes(filtro) ? "" : "none";
     }
 }
