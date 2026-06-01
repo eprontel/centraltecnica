@@ -12,7 +12,6 @@ body{
     background:#0f172a;
     color:white;
 }
-
 header{
     background:#111827;
     padding:20px;
@@ -21,12 +20,10 @@ header{
     font-weight:bold;
     border-bottom:2px solid #1e293b;
 }
-
 .search{
     padding:20px;
     background:#111827;
 }
-
 .search input{
     width:100%;
     padding:14px;
@@ -35,11 +32,9 @@ header{
     font-size:16px;
     box-sizing:border-box;
 }
-
 .container{
     padding:20px;
 }
-
 .card{
     background:#1e293b;
     border-radius:12px;
@@ -47,39 +42,32 @@ header{
     margin-bottom:20px;
     box-shadow:0 4px 10px rgba(0,0,0,0.4);
 }
-
 .card h2{
     margin-top:0;
     color:#38bdf8;
 }
-
 table{
     width:100%;
     border-collapse:collapse;
     margin-top:10px;
 }
-
 th{
     background:#0f172a;
     padding:10px;
     text-align:left;
 }
-
 td{
     padding:10px;
     border-bottom:1px solid #334155;
 }
-
 tr:hover{
     background:#334155;
 }
-
 a{
     color:#22c55e;
     font-weight:bold;
     text-decoration:none;
 }
-
 footer{
     text-align:center;
     padding:20px;
@@ -87,63 +75,45 @@ footer{
     margin-top:40px;
     color:#94a3b8;
 }
-
 .status{
     padding:15px 20px;
     color:#94a3b8;
 }
-
 .erro{
     color:#f87171;
     padding:20px;
+    line-height:1.5;
 }
 </style>
 
 <script>
-
 const usuarios = [
-    {
-        usuario: "eprontel",
-        senha: "Adl141103$"
-    },
-    {
-        usuario: "osmar",
-        senha: "osmar21082026"
-    }
+    { usuario: "eprontel", senha: "Adl141103$" },
+    { usuario: "osmar", senha: "osmar21082026" }
 ];
 
 const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQKwaZQPoN-zO1ZPMdN6AOlgtGqUltsRAir0VIO2Q8SBy9er1uMQOSBtRSlODauTQ/pub?gid=1313662978&single=true&output=csv";
 
 window.onload = function() {
-
     let usuarioDigitado = prompt("Usuário:");
     let senhaDigitada = prompt("Senha:");
-
     let acessoLiberado = false;
 
     for (let i = 0; i < usuarios.length; i++) {
-
-        if (
-            usuarioDigitado === usuarios[i].usuario &&
-            senhaDigitada === usuarios[i].senha
-        ) {
+        if (usuarioDigitado === usuarios[i].usuario && senhaDigitada === usuarios[i].senha) {
             acessoLiberado = true;
             break;
         }
     }
 
     if (!acessoLiberado) {
-
         alert("Acesso negado");
-
         document.body.innerHTML = "<h1 style='text-align:center;margin-top:100px;'>Acesso bloqueado</h1>";
-
         return;
     }
 
     carregarDadosGoogleSheets();
-}
-
+};
 
 function detectarSeparador(texto) {
     const primeiraLinha = texto.split(/\r?\n/)[0] || "";
@@ -174,7 +144,7 @@ function parseCSV(texto) {
         } else if ((char === "\n" || char === "\r") && !dentroAspas) {
             if (char === "\r" && prox === "\n") i++;
             linha.push(campo);
-            if (linha.some(c => c.trim() !== "")) linhas.push(linha);
+            if (linha.some(c => String(c).trim() !== "")) linhas.push(linha);
             linha = [];
             campo = "";
         } else {
@@ -184,27 +154,10 @@ function parseCSV(texto) {
 
     if (campo !== "" || linha.length > 0) {
         linha.push(campo);
-        if (linha.some(c => c.trim() !== "")) linhas.push(linha);
+        if (linha.some(c => String(c).trim() !== "")) linhas.push(linha);
     }
 
     return linhas;
-}
-
-function localizarColuna(cabecalho, nomesPossiveis, posicaoPadrao) {
-    for (const nome of nomesPossiveis) {
-        const indice = cabecalho.indexOf(normalizar(nome));
-        if (indice >= 0) return indice;
-    }
-    return posicaoPadrao;
-}
-
-function normalizar(texto) {
-    return (texto || "")
-        .toString()
-        .trim()
-        .toLowerCase()
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "");
 }
 
 function escaparHTML(texto) {
@@ -232,31 +185,30 @@ async function carregarDadosGoogleSheets() {
         const resposta = await fetch(CSV_URL + "&cache=" + new Date().getTime());
 
         if (!resposta.ok) {
-            throw new Error("Erro ao carregar a planilha.");
+            throw new Error("Erro HTTP " + resposta.status + " ao carregar o CSV.");
         }
 
         const csv = await resposta.text();
+
+        if (!csv || csv.trim() === "") {
+            throw new Error("O CSV veio vazio. Verifique a publicação da aba correta.");
+        }
+
         const linhas = parseCSV(csv);
 
         if (linhas.length < 2) {
-            throw new Error("A planilha está vazia ou não possui dados.");
+            throw new Error("A planilha não possui linhas de dados.");
         }
 
-        const cabecalho = linhas[0].map(normalizar);
-
-        // Ordem correta da planilha:
+        // Leitura fixa por posição:
         // A Cliente | B Equipamento | C IP | D Acesso | E Porta | F Usuario | G Senha
-        const colCliente = localizarColuna(cabecalho, ["cliente", "condominio", "condomínio"], 0);
-        const colEquipamento = localizarColuna(cabecalho, ["equipamento", "dispositivo", "descricao", "descrição"], 1);
-        const colIP = localizarColuna(cabecalho, ["ip", "endereco ip", "endereço ip"], 2);
-        const colAcesso = localizarColuna(cabecalho, ["acesso", "url", "link", "ddns"], 3);
-        const colPorta = localizarColuna(cabecalho, ["porta", "porta http", "porta servico", "porta serviço"], 4);
-        const colUsuario = localizarColuna(cabecalho, ["usuario", "usuário", "user", "login"], 5);
-        const colSenha = localizarColuna(cabecalho, ["senha", "password", "pass"], 6);
-
-        if (linhas[0].length < 7) {
-            throw new Error("A aba precisa ter pelo menos 7 colunas nesta ordem: Cliente, Equipamento, IP, Acesso, Porta, Usuario, Senha.");
-        }
+        const colCliente = 0;
+        const colEquipamento = 1;
+        const colIP = 2;
+        const colAcesso = 3;
+        const colPorta = 4;
+        const colUsuario = 5;
+        const colSenha = 6;
 
         const clientes = {};
 
@@ -267,9 +219,9 @@ async function carregarDadosGoogleSheets() {
             const equipamento = (l[colEquipamento] || "").trim();
             const ip = (l[colIP] || "").trim();
             const acesso = (l[colAcesso] || "").trim();
-            const porta = colPorta >= 0 ? (l[colPorta] || "").trim() : "";
-            const usuario = colUsuario >= 0 ? (l[colUsuario] || "").trim() : "";
-            const senha = colSenha >= 0 ? (l[colSenha] || "").trim() : "";
+            const porta = (l[colPorta] || "").trim();
+            const usuario = (l[colUsuario] || "").trim();
+            const senha = (l[colSenha] || "").trim();
 
             if (!cliente && !equipamento && !ip && !acesso && !porta && !usuario && !senha) {
                 continue;
@@ -281,14 +233,7 @@ async function carregarDadosGoogleSheets() {
                 clientes[nomeCliente] = [];
             }
 
-            clientes[nomeCliente].push({
-                equipamento,
-                ip,
-                acesso,
-                porta,
-                usuario,
-                senha
-            });
+            clientes[nomeCliente].push({ equipamento, ip, acesso, porta, usuario, senha });
         }
 
         let html = "";
@@ -309,13 +254,9 @@ async function carregarDadosGoogleSheets() {
             `;
 
             clientes[cliente].forEach(eq => {
-                let acessoHTML = "";
-
-                if (ehURL(eq.acesso)) {
-                    acessoHTML = `<a href="${escaparHTML(eq.acesso)}" target="_blank">Abrir acesso</a>`;
-                } else {
-                    acessoHTML = escaparHTML(eq.acesso);
-                }
+                let acessoHTML = ehURL(eq.acesso)
+                    ? `<a href="${escaparHTML(eq.acesso)}" target="_blank">Abrir acesso</a>`
+                    : escaparHTML(eq.acesso);
 
                 html += `
                     <tr>
@@ -336,52 +277,42 @@ async function carregarDadosGoogleSheets() {
         });
 
         container.innerHTML = html;
-        status.innerText = "Dados carregados com sucesso. Colunas lidas na ordem: Cliente, Equipamento, IP, Acesso, Porta, Usuário e Senha.";
+        status.innerText = "Dados carregados com sucesso. Leitura fixa: E=Porta, F=Usuário, G=Senha.";
 
     } catch (erro) {
         console.error(erro);
-        status.innerHTML = `<div class="erro">Não foi possível carregar a planilha. Verifique se ela está publicada como CSV e se as colunas estão corretas.</div>`;
+        status.innerHTML = `
+            <div class="erro">
+                Não foi possível carregar a planilha.<br>
+                <strong>Erro:</strong> ${escaparHTML(erro.message)}<br><br>
+                Verifique se a planilha está em <strong>Arquivo → Compartilhar → Publicar na web</strong> e se a aba publicada é a correta.
+            </div>
+        `;
     }
 }
 
 function buscarClientes() {
-
-    let filtro = document.getElementById('busca').value.toLowerCase();
-
-    let cards = document.getElementsByClassName('card');
+    let filtro = document.getElementById("busca").value.toLowerCase();
+    let cards = document.getElementsByClassName("card");
 
     for (let i = 0; i < cards.length; i++) {
-
         let texto = cards[i].innerText.toLowerCase();
-
-        if(texto.includes(filtro)){
-            cards[i].style.display = "";
-        } else {
-            cards[i].style.display = "none";
-        }
+        cards[i].style.display = texto.includes(filtro) ? "" : "none";
     }
 }
 </script>
-
 </head>
 
 <body>
-
-<header>
-Central Técnica - CFTV & Controle de Acesso
-</header>
+<header>Central Técnica - CFTV & Controle de Acesso</header>
 
 <div class="search">
 <input type="text" id="busca" onkeyup="buscarClientes()" placeholder="Buscar cliente, IP ou equipamento...">
 </div>
 
 <div id="status" class="status"></div>
-
 <div class="container" id="clientes"></div>
 
-<footer>
-Central Técnica © 2026
-</footer>
-
+<footer>Central Técnica © 2026</footer>
 </body>
 </html>
