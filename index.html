@@ -145,7 +145,15 @@ window.onload = function() {
 }
 
 
+function detectarSeparador(texto) {
+    const primeiraLinha = texto.split(/\r?\n/)[0] || "";
+    const virgulas = (primeiraLinha.match(/,/g) || []).length;
+    const pontoVirgulas = (primeiraLinha.match(/;/g) || []).length;
+    return pontoVirgulas > virgulas ? ";" : ",";
+}
+
 function parseCSV(texto) {
+    const separador = detectarSeparador(texto);
     const linhas = [];
     let linha = [];
     let campo = "";
@@ -160,7 +168,7 @@ function parseCSV(texto) {
             i++;
         } else if (char === '"') {
             dentroAspas = !dentroAspas;
-        } else if (char === "," && !dentroAspas) {
+        } else if (char === separador && !dentroAspas) {
             linha.push(campo);
             campo = "";
         } else if ((char === "\n" || char === "\r") && !dentroAspas) {
@@ -180,6 +188,14 @@ function parseCSV(texto) {
     }
 
     return linhas;
+}
+
+function localizarColuna(cabecalho, nomesPossiveis, posicaoPadrao) {
+    for (const nome of nomesPossiveis) {
+        const indice = cabecalho.indexOf(normalizar(nome));
+        if (indice >= 0) return indice;
+    }
+    return posicaoPadrao;
 }
 
 function normalizar(texto) {
@@ -228,16 +244,18 @@ async function carregarDadosGoogleSheets() {
 
         const cabecalho = linhas[0].map(normalizar);
 
-        const colCliente = cabecalho.indexOf("cliente");
-        const colEquipamento = cabecalho.indexOf("equipamento");
-        const colIP = cabecalho.indexOf("ip");
-        const colAcesso = cabecalho.indexOf("acesso");
-        const colPorta = cabecalho.indexOf("porta");
-        const colUsuario = cabecalho.indexOf("usuario");
-        const colSenha = cabecalho.indexOf("senha");
+        // Ordem correta da planilha:
+        // A Cliente | B Equipamento | C IP | D Acesso | E Porta | F Usuario | G Senha
+        const colCliente = localizarColuna(cabecalho, ["cliente", "condominio", "condomínio"], 0);
+        const colEquipamento = localizarColuna(cabecalho, ["equipamento", "dispositivo", "descricao", "descrição"], 1);
+        const colIP = localizarColuna(cabecalho, ["ip", "endereco ip", "endereço ip"], 2);
+        const colAcesso = localizarColuna(cabecalho, ["acesso", "url", "link", "ddns"], 3);
+        const colPorta = localizarColuna(cabecalho, ["porta", "porta http", "porta servico", "porta serviço"], 4);
+        const colUsuario = localizarColuna(cabecalho, ["usuario", "usuário", "user", "login"], 5);
+        const colSenha = localizarColuna(cabecalho, ["senha", "password", "pass"], 6);
 
-        if (colCliente === -1 || colEquipamento === -1 || colIP === -1 || colAcesso === -1) {
-            throw new Error("A aba precisa ter as colunas: Cliente, Equipamento, IP, Acesso, Porta, Usuario, Senha.");
+        if (linhas[0].length < 7) {
+            throw new Error("A aba precisa ter pelo menos 7 colunas nesta ordem: Cliente, Equipamento, IP, Acesso, Porta, Usuario, Senha.");
         }
 
         const clientes = {};
@@ -285,7 +303,7 @@ async function carregarDadosGoogleSheets() {
                             <th>IP</th>
                             <th>Acesso</th>
                             <th>Porta</th>
-                            <th>Usuario</th>
+                            <th>Usuário</th>
                             <th>Senha</th>
                         </tr>
             `;
@@ -318,7 +336,7 @@ async function carregarDadosGoogleSheets() {
         });
 
         container.innerHTML = html;
-        status.innerText = "Dados carregados com sucesso.";
+        status.innerText = "Dados carregados com sucesso. Colunas lidas na ordem: Cliente, Equipamento, IP, Acesso, Porta, Usuário e Senha.";
 
     } catch (erro) {
         console.error(erro);
