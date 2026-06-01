@@ -3,128 +3,183 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Central Técnica NN Segurança</title>
+<title>Eprontel Soluções | Central Técnica</title>
 
 <style>
 :root {
-    --bg:#0f172a;
-    --panel:#111827;
-    --card:#1e293b;
-    --card2:#243449;
+    --bg:#08111f;
+    --panel:#0f172a;
+    --card:#182235;
+    --card2:#223149;
     --line:#334155;
     --text:#f8fafc;
     --muted:#94a3b8;
     --blue:#38bdf8;
     --green:#22c55e;
-    --red:#f87171;
+    --red:#ef4444;
+    --softred:#f87171;
+    --yellow:#facc15;
 }
-* { box-sizing:border-box; }
-body {
+*{box-sizing:border-box}
+body{
     margin:0;
     font-family:Arial, Helvetica, sans-serif;
-    background:linear-gradient(135deg,#0f172a,#111827);
+    background:radial-gradient(circle at top,#172554 0,#08111f 38%,#020617 100%);
     color:var(--text);
 }
-header {
-    background:linear-gradient(135deg,#020617,#111827);
+header{
     padding:24px 20px;
+    background:linear-gradient(135deg,#020617,#111827);
     border-bottom:1px solid var(--line);
-    text-align:center;
 }
-header h1 { margin:0; font-size:30px; letter-spacing:.3px; }
-header p { margin:8px 0 0; color:var(--muted); font-size:14px; }
-.topbar {
-    background:var(--panel);
-    padding:18px 20px;
+.header-inner{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:18px;
+    max-width:1500px;
+    margin:auto;
+}
+.brand-wrap{display:flex;gap:16px;align-items:center}
+.logo{
+    width:76px;
+    height:76px;
+    object-fit:contain;
+    filter:drop-shadow(0 0 16px rgba(239,68,68,.45));
+}
+.brand h1{margin:0;font-size:30px;letter-spacing:.3px}
+.brand p{margin:8px 0 0;color:var(--muted);font-size:14px}
+.selos{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.selo{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    padding:6px 10px;
+    border-radius:999px;
+    background:#0f172a;
+    border:1px solid var(--line);
+    color:#cbd5e1;
+    font-size:12px;
+}
+.selo.online{color:#bbf7d0;border-color:#166534;background:#052e16}
+.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+button{
+    cursor:pointer;
+    border:none;
+    border-radius:10px;
+    padding:11px 13px;
+    background:#2563eb;
+    color:white;
+    font-weight:bold;
+}
+button:hover{filter:brightness(1.1)}
+.btn-green{background:#16a34a}
+.btn-yellow{background:#ca8a04}
+.topbar{
+    background:rgba(15,23,42,.96);
+    backdrop-filter:blur(8px);
+    padding:16px 20px;
     display:grid;
-    grid-template-columns:2fr 1fr 1fr;
+    grid-template-columns:2fr 1fr 1fr 1fr;
     gap:12px;
     position:sticky;
     top:0;
     z-index:10;
     border-bottom:1px solid var(--line);
 }
-input, select, button {
+input,select{
+    width:100%;
     padding:13px;
     border:none;
     border-radius:10px;
     font-size:15px;
+    background:#f8fafc;
+    color:#0f172a;
 }
-input, select { width:100%; background:#f8fafc; color:#0f172a; }
-button { cursor:pointer; background:#2563eb; color:white; font-weight:bold; }
-button:hover { filter:brightness(1.1); }
-.status { padding:16px 20px; color:var(--muted); }
-.dashboard {
+.status{padding:14px 20px;color:var(--muted);max-width:1500px;margin:auto}
+.dashboard{
+    max-width:1500px;
+    margin:auto;
     display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:16px;
-    padding:20px;
+    grid-template-columns:repeat(5,1fr);
+    gap:14px;
+    padding:18px 20px;
 }
-.metric {
-    background:var(--card);
-    border:1px solid var(--line);
-    border-radius:16px;
-    padding:20px;
-    box-shadow:0 6px 18px rgba(0,0,0,.25);
-}
-.metric span { display:block; color:var(--muted); font-size:13px; }
-.metric strong { display:block; margin-top:8px; font-size:30px; color:var(--blue); }
-.container { padding:0 20px 30px; }
-.card {
-    background:var(--card);
+.metric{
+    background:linear-gradient(180deg,#1e293b,#111827);
     border:1px solid var(--line);
     border-radius:16px;
     padding:18px;
-    margin-bottom:22px;
-    box-shadow:0 8px 22px rgba(0,0,0,.28);
+    box-shadow:0 8px 22px rgba(0,0,0,.25);
 }
-.card-header {
+.metric span{display:block;color:var(--muted);font-size:13px}
+.metric strong{display:block;margin-top:8px;font-size:28px;color:var(--blue)}
+.container{max-width:1500px;margin:auto;padding:0 20px 30px}
+.card{
+    background:rgba(24,34,53,.96);
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:18px;
+    margin-bottom:20px;
+    box-shadow:0 8px 26px rgba(0,0,0,.28);
+}
+.card-header{
     display:flex;
     justify-content:space-between;
     align-items:center;
     gap:10px;
     margin-bottom:12px;
 }
-.card h2 { margin:0; color:var(--blue); font-size:24px; }
-.badge {
+.card h2{margin:0;color:var(--blue);font-size:24px}
+.card-sub{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.badge{
     background:#0f172a;
     border:1px solid var(--line);
     border-radius:999px;
-    padding:7px 12px;
+    padding:7px 11px;
     color:var(--muted);
-    font-size:13px;
-}
-.table-wrap { overflow-x:auto; }
-table { width:100%; border-collapse:collapse; min-width:900px; }
-th { background:#0f172a; padding:12px; text-align:left; color:#e2e8f0; }
-td { padding:11px 12px; border-bottom:1px solid var(--line); vertical-align:middle; }
-tr:hover { background:var(--card2); }
-a { color:var(--green); font-weight:bold; text-decoration:none; }
-.small-btn {
-    padding:7px 9px;
-    border-radius:8px;
     font-size:12px;
-    margin-left:5px;
-    background:#334155;
 }
-.copy-btn { background:#475569; }
-.show-btn { background:#0ea5e9; }
-.senha { font-family:monospace; letter-spacing:.5px; }
-.erro { color:var(--red); padding:20px; line-height:1.5; }
-footer {
+.fav{background:transparent;border:1px solid var(--line);color:var(--yellow);padding:7px 10px}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:1050px}
+th{background:#0f172a;padding:12px;text-align:left;color:#e2e8f0;font-size:14px}
+td{padding:11px 12px;border-bottom:1px solid var(--line);vertical-align:middle}
+tr:hover{background:var(--card2)}
+a{color:var(--green);font-weight:bold;text-decoration:none}
+.tipo{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    border-radius:999px;
+    padding:5px 9px;
+    background:#0f172a;
+    color:#cbd5e1;
+    font-size:12px;
+}
+.small-btn{padding:6px 8px;border-radius:8px;font-size:12px;margin-left:5px;background:#475569}
+.show-btn{background:#0ea5e9}
+.senha{font-family:monospace;letter-spacing:.5px}
+.erro{color:var(--softred);padding:20px;line-height:1.5}
+.footer-note{
     text-align:center;
-    padding:25px;
+    padding:26px;
     background:#020617;
     color:var(--muted);
     border-top:1px solid var(--line);
 }
-@media(max-width:900px) {
-    .topbar { grid-template-columns:1fr; }
-    .dashboard { grid-template-columns:1fr 1fr; }
-    header h1 { font-size:23px; }
+.footer-note strong{color:#e2e8f0}
+@media(max-width:1100px){
+    .topbar{grid-template-columns:1fr 1fr}
+    .dashboard{grid-template-columns:1fr 1fr}
 }
-@media(max-width:520px) {
-    .dashboard { grid-template-columns:1fr; }
+@media(max-width:650px){
+    .header-inner{align-items:flex-start;flex-direction:column}
+    .brand-wrap{align-items:flex-start}
+    .logo{width:62px;height:62px}
+    .topbar{grid-template-columns:1fr}
+    .dashboard{grid-template-columns:1fr}
+    .brand h1{font-size:22px}
 }
 </style>
 
@@ -136,125 +191,106 @@ const usuarios = [
 
 const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSbzQGBfaz8LUu7X66fcCkRxz5xsWcMY2vwHQOB2-uK7zUwuAl74YTTRJOteM43MWiCgFxKG4MLmgYj/pub?gid=226390867&single=true&output=csv";
 let dadosGlobais = [];
+let favoritos = JSON.parse(localStorage.getItem("eprontel_favoritos") || "[]");
+let mostrarTodasSenhas = false;
 
 window.onload = function(){
+    atualizarRelogio();
+    setInterval(atualizarRelogio, 1000);
+
     const usuarioDigitado = prompt("Usuário:");
     const senhaDigitada = prompt("Senha:");
 
     const acessoLiberado = usuarios.some(u => usuarioDigitado === u.usuario && senhaDigitada === u.senha);
-
     if(!acessoLiberado){
         alert("Acesso negado");
         document.body.innerHTML = "<h1 style='text-align:center;margin-top:100px;'>Acesso bloqueado</h1>";
         return;
     }
-
     carregarDadosGoogleSheets();
 };
 
+function atualizarRelogio(){
+    const el = document.getElementById("relogio");
+    if(el){
+        const agora = new Date();
+        el.innerText = agora.toLocaleString("pt-BR");
+    }
+}
+
 function parseCSV(texto){
     const linhas = [];
-    let linha = [];
-    let campo = "";
-    let dentroAspas = false;
-
+    let linha = [], campo = "", dentroAspas = false;
     for(let i=0;i<texto.length;i++){
-        const char = texto[i];
-        const prox = texto[i+1];
-
-        if(char === '"' && dentroAspas && prox === '"'){
-            campo += '"';
-            i++;
-        }else if(char === '"'){
-            dentroAspas = !dentroAspas;
-        }else if(char === "," && !dentroAspas){
-            linha.push(campo);
-            campo = "";
-        }else if((char === "\n" || char === "\r") && !dentroAspas){
+        const char = texto[i], prox = texto[i+1];
+        if(char === '"' && dentroAspas && prox === '"'){ campo += '"'; i++; }
+        else if(char === '"') dentroAspas = !dentroAspas;
+        else if(char === "," && !dentroAspas){ linha.push(campo); campo = ""; }
+        else if((char === "\n" || char === "\r") && !dentroAspas){
             if(char === "\r" && prox === "\n") i++;
             linha.push(campo);
             if(linha.some(c => String(c).trim() !== "")) linhas.push(linha);
-            linha = [];
-            campo = "";
-        }else{
-            campo += char;
-        }
+            linha = []; campo = "";
+        } else campo += char;
     }
-
     if(campo !== "" || linha.length > 0){
         linha.push(campo);
         if(linha.some(c => String(c).trim() !== "")) linhas.push(linha);
     }
-
     return linhas;
 }
 
 function escaparHTML(texto){
     return (texto || "").toString()
-        .replace(/&/g,"&amp;")
-        .replace(/</g,"&lt;")
-        .replace(/>/g,"&gt;")
-        .replace(/"/g,"&quot;")
-        .replace(/'/g,"&#039;");
+        .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;").replace(/'/g,"&#039;");
 }
-
-function limparParaParametro(texto){
-    return (texto || "").toString().replace(/'/g, "\'").replace(/"/g, "&quot;");
-}
-
+function limparParametro(texto){ return (texto || "").toString().replace(/\\/g,"\\\\").replace(/'/g,"\\'"); }
 function ehURL(texto){
     const t = (texto || "").trim().toLowerCase();
     return t.startsWith("http://") || t.startsWith("https://");
 }
-
 function montarLinkAcesso(acesso){
-    if(ehURL(acesso)){
-        return `<a href="${escaparHTML(acesso)}" target="_blank">Abrir acesso</a>`;
-    }
-    return escaparHTML(acesso);
+    return ehURL(acesso) ? `<a href="${escaparHTML(acesso)}" target="_blank">Abrir acesso</a>` : escaparHTML(acesso);
 }
-
-function copiarTexto(texto){
-    navigator.clipboard.writeText(texto || "").then(() => {
-        alert("Copiado!");
-    });
+function copiarTexto(texto){ navigator.clipboard.writeText(texto || "").then(() => alert("Copiado!")); }
+function tipoEquipamento(equipamento){
+    const e = (equipamento || "").toLowerCase();
+    if(e.includes("nvd") || e.includes("nvr") || e.includes("dvr")) return "🎥 Gravador";
+    if(e.includes("ss") || e.includes("facial") || e.includes("control") || e.includes("eclusa")) return "🚪 Acesso";
+    if(e.includes("radio") || e.includes("rádio") || e.includes("ap ")) return "📡 Rede";
+    if(e.includes("camera") || e.includes("câmera") || e.includes("cam")) return "📷 Câmera";
+    if(e.includes("remote") || e.includes("remoto")) return "🌐 Remoto";
+    return "🛠️ Técnico";
 }
-
 function alternarSenha(botao){
     const span = botao.parentElement.querySelector(".senha");
     const valor = span.getAttribute("data-valor");
     const visivel = span.getAttribute("data-visivel") === "1";
-
-    if(visivel){
-        span.innerText = "••••••••";
-        span.setAttribute("data-visivel","0");
-        botao.innerText = "Mostrar";
-    }else{
-        span.innerText = valor;
-        span.setAttribute("data-visivel","1");
-        botao.innerText = "Ocultar";
-    }
+    span.innerText = visivel ? "••••••••" : valor;
+    span.setAttribute("data-visivel", visivel ? "0" : "1");
+    botao.innerText = visivel ? "Mostrar" : "Ocultar";
 }
-
+function alternarTodasSenhas(){ mostrarTodasSenhas = !mostrarTodasSenhas; renderizar(); }
+function alternarFavorito(cliente){
+    if(favoritos.includes(cliente)) favoritos = favoritos.filter(f => f !== cliente);
+    else favoritos.push(cliente);
+    localStorage.setItem("eprontel_favoritos", JSON.stringify(favoritos));
+    renderizar();
+}
 async function carregarDadosGoogleSheets(){
     const status = document.getElementById("status");
-
     try{
         status.innerText = "Carregando dados da planilha...";
-
         const resposta = await fetch(CSV_URL + "&cache=" + Date.now());
         if(!resposta.ok) throw new Error("Erro HTTP " + resposta.status + " ao carregar o CSV.");
-
         const csv = await resposta.text();
         const linhas = parseCSV(csv);
-
         if(linhas.length < 2) throw new Error("A planilha não possui dados.");
 
         dadosGlobais = [];
-
         for(let i=1;i<linhas.length;i++){
             const l = linhas[i];
-
             const item = {
                 cliente:(l[0] || "").trim(),
                 equipamento:(l[1] || "").trim(),
@@ -264,44 +300,41 @@ async function carregarDadosGoogleSheets(){
                 usuario:(l[5] || "").trim(),
                 senha:(l[6] || "").trim()
             };
-
             if(!item.cliente && !item.equipamento && !item.ip && !item.acesso && !item.porta && !item.usuario && !item.senha) continue;
-
             dadosGlobais.push(item);
         }
-
         preencherFiltroClientes();
         renderizar();
-        status.innerText = "Dados carregados com sucesso.";
-
+        const atualizado = new Date().toLocaleString("pt-BR");
+        status.innerText = "Dados carregados com sucesso. Última atualização: " + atualizado;
+        document.getElementById("ultimaAtualizacao").innerText = atualizado;
     }catch(erro){
-        console.error(erro);
         status.innerHTML = `<div class="erro">Não foi possível carregar a planilha.<br><strong>Erro:</strong> ${escaparHTML(erro.message)}</div>`;
     }
 }
-
 function preencherFiltroClientes(){
     const select = document.getElementById("filtroCliente");
     const clientes = [...new Set(dadosGlobais.map(d => d.cliente || "Sem cliente"))].sort();
-
     select.innerHTML = `<option value="">Todos os clientes</option>`;
-    clientes.forEach(c => {
-        select.innerHTML += `<option value="${escaparHTML(c)}">${escaparHTML(c)}</option>`;
-    });
+    clientes.forEach(c => select.innerHTML += `<option value="${escaparHTML(c)}">${escaparHTML(c)}</option>`);
 }
-
 function renderizar(){
     const busca = document.getElementById("busca").value.toLowerCase();
     const clienteFiltro = document.getElementById("filtroCliente").value;
+    const tipoFiltro = document.getElementById("filtroTipo").value;
+    const somenteFavoritos = document.getElementById("somenteFavoritos").value === "sim";
     const container = document.getElementById("clientes");
 
     const filtrados = dadosGlobais.filter(d => {
-        const texto = `${d.cliente} ${d.equipamento} ${d.ip} ${d.acesso} ${d.porta} ${d.usuario} ${d.senha}`.toLowerCase();
-        const bateBusca = texto.includes(busca);
-        const bateCliente = !clienteFiltro || d.cliente === clienteFiltro;
-        return bateBusca && bateCliente;
+        const tipo = tipoEquipamento(d.equipamento);
+        const texto = `${d.cliente} ${d.equipamento} ${d.ip} ${d.acesso} ${d.porta} ${d.usuario} ${d.senha} ${tipo}`.toLowerCase();
+        return texto.includes(busca)
+            && (!clienteFiltro || d.cliente === clienteFiltro)
+            && (!tipoFiltro || tipo.includes(tipoFiltro))
+            && (!somenteFavoritos || favoritos.includes(d.cliente || "Sem cliente"));
     });
 
+    atualizarDashboard(filtrados);
     const grupos = {};
     filtrados.forEach(d => {
         const nome = d.cliente || "Sem cliente";
@@ -309,91 +342,101 @@ function renderizar(){
         grupos[nome].push(d);
     });
 
-    atualizarDashboard(filtrados);
-
-    let html = "";
-
-    Object.keys(grupos).sort().forEach(cliente => {
-        html += `
-        <div class="card">
-            <div class="card-header">
-                <h2>${escaparHTML(cliente)}</h2>
-                <div class="badge">${grupos[cliente].length} equipamentos</div>
-            </div>
-            <div class="table-wrap">
-            <table>
-                <tr>
-                    <th>Equipamento</th>
-                    <th>IP</th>
-                    <th>Acesso</th>
-                    <th>Porta</th>
-                    <th>Usuário</th>
-                    <th>Senha</th>
-                </tr>`;
-
-        grupos[cliente].forEach(eq => {
-            const ipSafe = limparParaParametro(eq.ip);
-            const usuarioSafe = limparParaParametro(eq.usuario);
-            const senhaSafe = limparParaParametro(eq.senha);
-            html += `
-                <tr>
-                    <td>${escaparHTML(eq.equipamento)}</td>
-                    <td>${escaparHTML(eq.ip)} <button class="small-btn copy-btn" onclick="copiarTexto('${ipSafe}')">Copiar</button></td>
-                    <td>${montarLinkAcesso(eq.acesso)}</td>
-                    <td>${escaparHTML(eq.porta)}</td>
-                    <td>${escaparHTML(eq.usuario)} <button class="small-btn copy-btn" onclick="copiarTexto('${usuarioSafe}')">Copiar</button></td>
-                    <td>
-                        <span class="senha" data-visivel="0" data-valor="${escaparHTML(eq.senha)}">••••••••</span>
-                        <button class="small-btn show-btn" onclick="alternarSenha(this)">Mostrar</button>
-                        <button class="small-btn copy-btn" onclick="copiarTexto('${senhaSafe}')">Copiar</button>
-                    </td>
-                </tr>`;
-        });
-
-        html += `
-            </table>
-            </div>
-        </div>`;
+    let nomes = Object.keys(grupos).sort((a,b) => {
+        const fa = favoritos.includes(a), fb = favoritos.includes(b);
+        if(fa && !fb) return -1;
+        if(!fa && fb) return 1;
+        return a.localeCompare(b);
     });
 
-    if(!html){
-        html = `<div class="erro">Nenhum resultado encontrado.</div>`;
-    }
+    let html = "";
+    nomes.forEach(cliente => {
+        const favorito = favoritos.includes(cliente);
+        html += `<div class="card">
+            <div class="card-header">
+                <h2>${favorito ? "⭐ " : ""}${escaparHTML(cliente)}</h2>
+                <div class="card-sub">
+                    <button class="fav" onclick="alternarFavorito('${limparParametro(cliente)}')">${favorito ? "Remover favorito" : "Favoritar"}</button>
+                    <div class="badge">${grupos[cliente].length} equipamentos</div>
+                </div>
+            </div>
+            <div class="table-wrap"><table>
+            <tr><th>Tipo</th><th>Equipamento</th><th>IP</th><th>Acesso</th><th>Porta</th><th>Usuário</th><th>Senha</th></tr>`;
 
-    container.innerHTML = html;
+        grupos[cliente].forEach(eq => {
+            const senhaVisivel = mostrarTodasSenhas;
+            html += `<tr>
+                <td><span class="tipo">${tipoEquipamento(eq.equipamento)}</span></td>
+                <td>${escaparHTML(eq.equipamento)}</td>
+                <td>${escaparHTML(eq.ip)} <button class="small-btn" onclick="copiarTexto('${limparParametro(eq.ip)}')">Copiar</button></td>
+                <td>${montarLinkAcesso(eq.acesso)}</td>
+                <td>${escaparHTML(eq.porta)}</td>
+                <td>${escaparHTML(eq.usuario)} <button class="small-btn" onclick="copiarTexto('${limparParametro(eq.usuario)}')">Copiar</button></td>
+                <td>
+                    <span class="senha" data-visivel="${senhaVisivel ? "1" : "0"}" data-valor="${escaparHTML(eq.senha)}">${senhaVisivel ? escaparHTML(eq.senha) : "••••••••"}</span>
+                    <button class="small-btn show-btn" onclick="alternarSenha(this)">${senhaVisivel ? "Ocultar" : "Mostrar"}</button>
+                    <button class="small-btn" onclick="copiarTexto('${limparParametro(eq.senha)}')">Copiar</button>
+                </td>
+            </tr>`;
+        });
+        html += `</table></div></div>`;
+    });
+    container.innerHTML = html || `<div class="erro">Nenhum resultado encontrado.</div>`;
 }
-
 function atualizarDashboard(lista){
-    const clientes = new Set(lista.map(d => d.cliente || "Sem cliente"));
-    const acessos = lista.filter(d => ehURL(d.acesso)).length;
-    const senhas = lista.filter(d => d.senha).length;
-
-    document.getElementById("totalClientes").innerText = clientes.size;
+    document.getElementById("totalClientes").innerText = new Set(lista.map(d => d.cliente || "Sem cliente")).size;
     document.getElementById("totalEquipamentos").innerText = lista.length;
-    document.getElementById("totalAcessos").innerText = acessos;
-    document.getElementById("totalSenhas").innerText = senhas;
+    document.getElementById("totalAcessos").innerText = lista.filter(d => ehURL(d.acesso)).length;
+    document.getElementById("totalSenhas").innerText = lista.filter(d => d.senha).length;
+    document.getElementById("totalFavoritos").innerText = favoritos.length;
 }
-
 function limparFiltros(){
     document.getElementById("busca").value = "";
     document.getElementById("filtroCliente").value = "";
+    document.getElementById("filtroTipo").value = "";
+    document.getElementById("somenteFavoritos").value = "";
     renderizar();
 }
 </script>
 </head>
-
 <body>
 <header>
-    <h1>Central Técnica - CFTV & Controle de Acesso</h1>
-    <p>NN Segurança • Inventário técnico online • Dados via Google Sheets</p>
+    <div class="header-inner">
+        <div class="brand-wrap">
+            <img src="logo.png" alt="Eprontel Soluções" class="logo">
+            <div class="brand">
+                <h1>Eprontel Soluções | Central Técnica Integrada</h1>
+                <p>CFTV • Controle de Acesso • Redes • Portaria Remota</p>
+                <div class="selos">
+                    <span class="selo online">● Sistema Online</span>
+                    <span class="selo">Equipe técnica especializada desde 2003</span>
+                    <span class="selo">Atualizado: <span id="ultimaAtualizacao">aguardando dados</span></span>
+                    <span class="selo">Agora: <span id="relogio">--</span></span>
+                </div>
+            </div>
+        </div>
+        <div class="actions">
+            <button class="btn-green" onclick="carregarDadosGoogleSheets()">Atualizar dados</button>
+            <button class="btn-yellow" onclick="alternarTodasSenhas()">Mostrar/Ocultar senhas</button>
+        </div>
+    </div>
 </header>
 
 <div class="topbar">
-    <input type="text" id="busca" onkeyup="renderizar()" placeholder="Buscar cliente, IP, equipamento, porta ou usuário...">
-    <select id="filtroCliente" onchange="renderizar()">
-        <option value="">Todos os clientes</option>
+    <input type="text" id="busca" onkeyup="renderizar()" placeholder="Buscar cliente, IP, equipamento, porta, usuário ou senha...">
+    <select id="filtroCliente" onchange="renderizar()"><option value="">Todos os clientes</option></select>
+    <select id="filtroTipo" onchange="renderizar()">
+        <option value="">Todos os tipos</option>
+        <option value="Gravador">Gravador</option>
+        <option value="Acesso">Controle de acesso</option>
+        <option value="Rede">Rede/Rádio</option>
+        <option value="Câmera">Câmera</option>
+        <option value="Remoto">Remoto</option>
     </select>
-    <button onclick="limparFiltros()">Limpar filtros</button>
+    <select id="somenteFavoritos" onchange="renderizar()">
+        <option value="">Todos</option>
+        <option value="sim">Somente favoritos</option>
+    </select>
 </div>
 
 <div id="status" class="status"></div>
@@ -403,10 +446,10 @@ function limparFiltros(){
     <div class="metric"><span>Equipamentos</span><strong id="totalEquipamentos">0</strong></div>
     <div class="metric"><span>Acessos com link</span><strong id="totalAcessos">0</strong></div>
     <div class="metric"><span>Senhas cadastradas</span><strong id="totalSenhas">0</strong></div>
+    <div class="metric"><span>Favoritos</span><strong id="totalFavoritos">0</strong></div>
 </div>
 
 <div class="container" id="clientes"></div>
-
-<footer>Central Técnica © 2026 • NN Segurança</footer>
+<div class="footer-note"><strong>Eprontel Soluções</strong> © 2026 • Central Técnica Integrada • Experiência efetiva desde 2003</div>
 </body>
 </html>
