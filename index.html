@@ -29,7 +29,7 @@ const usuarios = [
     { usuario: "osmar", senha: "osmar21082026" }
 ];
 
-const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQKwaZQPoN-zO1ZPMdN6AOlgtGqUltsRAir0VIO2Q8SBy9er1uMQOSBtRSlODauTQ/pub?gid=1313662978&single=true&output=csv";
+const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSbzQGBfaz8LUu7X66fcCkRxz5xsWcMY2vwHQOB2-uK7zUwuAI74YTTRJOteM43MWiCgFxKG4MLmgYj/pub?gid=226390867&single=true&output=csv";
 
 window.onload = function(){
     const usuarioDigitado = prompt("Usuário:");
@@ -168,7 +168,7 @@ async function carregarDadosGoogleSheets(){
         const colSenha = acharIndice(cabecalho, ["senha","password","pass"]);
 
         if(colEquipamento < 0 || colIP < 0 || colAcesso < 0 || colPorta < 0 || colUsuario < 0 || colSenha < 0){
-            throw new Error("Cabeçalho incompleto. Precisa ter Equipamento, IP, Acesso, Porta, Usuario e Senha.");
+            throw new Error("Cabeçalho incompleto. Confira se a aba publicada tem: Cliente, Equipamento, IP, Acesso, Porta, Usuario e Senha.");
         }
 
         // Nome do cliente para abas individuais:
