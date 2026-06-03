@@ -189,73 +189,29 @@ const usuarios = [
     { usuario: "osmar", senha: "osmar21082026" }
 ];
 
-const PLANILHA_PUBLICADA = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSbzQGBfaz8LUu7X66fcCkRxz5xsWcMY2vwHQOB2-uK7zUwuAl74YTTRJOteM43MWiCgFxKG4MLmgYj/pub";
-const GID_INVENTARIO = "226390867";
+const PLANILHA_PUBHTML_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSbzQGBfaz8LUu7X66fcCkRxz5xsWcMY2vwHQOB2-uK7zUwuAl74YTTRJOteM43MWiCgFxKG4MLmgYj/pubhtml?gid=226390867&single=true";
 
-function montarCsvUrl(gid){
-    return `${PLANILHA_PUBLICADA}?gid=${gid}&single=true&output=csv`;
-}
-
-function montarHtmlUrl(gid){
-    return `${PLANILHA_PUBLICADA}html?gid=${gid}&single=true`;
-}
-
-function tabelaHtmlParaCsv(htmlTexto){
+function tabelaPublicadaParaLinhas(htmlTexto){
     const doc = new DOMParser().parseFromString(htmlTexto, "text/html");
     const tabela = doc.querySelector("table");
-    if(!tabela) throw new Error("Não encontrei tabela no link publicado.");
+    if(!tabela) throw new Error("Não encontrei tabela no link publicado da planilha.");
 
     const linhas = [];
     tabela.querySelectorAll("tr").forEach(tr => {
         const campos = [];
-        tr.querySelectorAll("th,td").forEach(td => {
-            let valor = (td.innerText || "").replace(/\\s+/g, " ").trim();
-            valor = '"' + valor.replace(/"/g, '""') + '"';
-            campos.push(valor);
+        tr.querySelectorAll("td,th").forEach(td => {
+            campos.push((td.innerText || "").replace(/\\s+/g, " ").trim());
         });
-        if(campos.length && campos.some(c => c.replace(/"/g,"").trim() !== "")){
-            linhas.push(campos.join(","));
-        }
+        if(campos.length && campos.some(c => c !== "")) linhas.push(campos);
     });
-    return linhas.join("\\n");
+    return linhas;
 }
 
-async function buscarDadosPublicado(){
-    const tentativas = [
-        { tipo: "CSV", url: montarCsvUrl(GID_INVENTARIO) },
-        { tipo: "HTML", url: montarHtmlUrl(GID_INVENTARIO) }
-    ];
-
-    let ultimoErro = "";
-    for(const tentativa of tentativas){
-        try{
-            const resposta = await fetch(tentativa.url, { cache: "no-store" });
-            if(!resposta.ok){
-                ultimoErro = `${tentativa.tipo}: Erro HTTP ${resposta.status}`;
-                continue;
-            }
-
-            const texto = await resposta.text();
-
-            if(tentativa.tipo === "CSV"){
-                if(texto.trim().startsWith("<")){
-                    ultimoErro = "CSV retornou HTML em vez de dados.";
-                    continue;
-                }
-                return { texto, tipo: tentativa.tipo, url: tentativa.url };
-            }
-
-            if(tentativa.tipo === "HTML"){
-                const csvConvertido = tabelaHtmlParaCsv(texto);
-                return { texto: csvConvertido, tipo: tentativa.tipo, url: tentativa.url };
-            }
-
-        }catch(e){
-            ultimoErro = `${tentativa.tipo}: ${e.message}`;
-        }
-    }
-
-    throw new Error(`${ultimoErro}. Confira se a aba Inventario Geral está publicada na Web.`);
+async function carregarLinhasDaPlanilha(){
+    const resposta = await fetch(PLANILHA_PUBHTML_URL, { cache: "no-store" });
+    if(!resposta.ok) throw new Error("Erro HTTP " + resposta.status + " ao carregar a planilha publicada.");
+    const htmlTexto = await resposta.text();
+    return tabelaPublicadaParaLinhas(htmlTexto);
 }
 let dadosGlobais = [];
 let favoritos = JSON.parse(localStorage.getItem("eprontel_favoritos") || "[]");
@@ -348,10 +304,8 @@ function alternarFavorito(cliente){
 async function carregarDadosGoogleSheets(){
     const status = document.getElementById("status");
     try{
-        status.innerText = "Carregando dados da planilha...";
-        const resultadoCsv = await buscarDadosPublicado();
-        const csv = resultadoCsv.texto;
-        const linhas = parseCSV(csv);
+        status.innerText = "Carregando dados da planilha publicada...";
+        const linhas = await carregarLinhasDaPlanilha();
         if(linhas.length < 2) throw new Error("A planilha não possui dados.");
 
         dadosGlobais = [];
@@ -369,10 +323,11 @@ async function carregarDadosGoogleSheets(){
             if(!item.cliente && !item.equipamento && !item.ip && !item.acesso && !item.porta && !item.usuario && !item.senha) continue;
             dadosGlobais.push(item);
         }
+
         preencherFiltroClientes();
         renderizar();
         const atualizado = new Date().toLocaleString("pt-BR");
-        status.innerText = "Dados carregados com sucesso via " + resultadoCsv.tipo + ". Última atualização: " + atualizado;
+        status.innerText = "Dados carregados com sucesso pela planilha publicada. Última atualização: " + atualizado;
         document.getElementById("ultimaAtualizacao").innerText = atualizado;
     }catch(erro){
         status.innerHTML = `<div class="erro">Não foi possível carregar a planilha publicada.<br><strong>Erro:</strong> ${escaparHTML(erro.message)}</div>`;
