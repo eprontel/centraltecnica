@@ -189,7 +189,35 @@ const usuarios = [
     { usuario: "osmar", senha: "osmar21082026" }
 ];
 
-const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSbzQGBfaz8LUu7X66fcCkRxz5xsWcMY2vwHQOB2-uK7zUwuAl74YTTRJOteM43MWiCgFxKG4MLmgYj/pub?gid=226390867&single=true&output=csv";
+const PLANILHA_PUBLICADA = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSbzQGBfaz8LUu7X66fcCkRxz5xsWcMY2vwHQOB2-uK7zUwuAl74YTTRJOteM43MWiCgFxKG4MLmgYj/pub";
+const CSV_GIDS = ["226390867"]; // GID da aba Inventario Geral publicada em CSV
+
+function montarCsvUrl(gid){
+    return `${PLANILHA_PUBLICADA}?gid=${gid}&single=true&output=csv`;
+}
+
+async function buscarCsvPublicado(){
+    let ultimoErro = "";
+    for(const gid of CSV_GIDS){
+        const url = montarCsvUrl(gid);
+        try{
+            const resposta = await fetch(url, { cache: "no-store" });
+            if(!resposta.ok){
+                ultimoErro = `Erro HTTP ${resposta.status} no gid ${gid}`;
+                continue;
+            }
+            const texto = await resposta.text();
+            if(texto.trim().startsWith("<")){
+                ultimoErro = `O gid ${gid} retornou HTML, não CSV. Confira se a aba foi publicada como CSV.`;
+                continue;
+            }
+            return { texto, gid, url };
+        }catch(e){
+            ultimoErro = e.message;
+        }
+    }
+    throw new Error(`${ultimoErro}. Verifique se a aba Inventario Geral está publicada na Web como CSV e se o GID está correto.`);
+}
 let dadosGlobais = [];
 let favoritos = JSON.parse(localStorage.getItem("eprontel_favoritos") || "[]");
 let mostrarTodasSenhas = false;
@@ -282,9 +310,8 @@ async function carregarDadosGoogleSheets(){
     const status = document.getElementById("status");
     try{
         status.innerText = "Carregando dados da planilha...";
-        const resposta = await fetch(CSV_URL + "&cache=" + Date.now());
-        if(!resposta.ok) throw new Error("Erro HTTP " + resposta.status + " ao carregar o CSV.");
-        const csv = await resposta.text();
+        const resultadoCsv = await buscarCsvPublicado();
+        const csv = resultadoCsv.texto;
         const linhas = parseCSV(csv);
         if(linhas.length < 2) throw new Error("A planilha não possui dados.");
 
@@ -306,7 +333,7 @@ async function carregarDadosGoogleSheets(){
         preencherFiltroClientes();
         renderizar();
         const atualizado = new Date().toLocaleString("pt-BR");
-        status.innerText = "Dados carregados com sucesso. Última atualização: " + atualizado;
+        status.innerText = "Dados carregados com sucesso pelo gid " + resultadoCsv.gid + ". Última atualização: " + atualizado;
         document.getElementById("ultimaAtualizacao").innerText = atualizado;
     }catch(erro){
         status.innerHTML = `<div class="erro">Não foi possível carregar a planilha.<br><strong>Erro:</strong> ${escaparHTML(erro.message)}</div>`;
@@ -344,6 +371,8 @@ function renderizar(){
 
     let nomes = Object.keys(grupos).sort((a,b) => {
         const fa = favoritos.includes(a), fb = favoritos.includes(b);
+        if(a === "ACESSOS IMPORTANTES") return -1;
+        if(b === "ACESSOS IMPORTANTES") return 1;
         if(fa && !fb) return -1;
         if(!fa && fb) return 1;
         return a.localeCompare(b);
